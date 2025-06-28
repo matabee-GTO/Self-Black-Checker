@@ -1,0 +1,180 @@
+body {
+    font-family: 'Helvetica Neue', 'Arial', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    text-align: center;
+}
+
+.container {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 90%;
+}
+
+h1 {
+    color: #1c1e21;
+    margin-bottom: 20px;
+    font-size: 2.5em;
+}
+
+#intro p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.hidden {
+    display: none;
+}
+
+#question-area {
+    margin-top: 30px;
+}
+
+.question-card {
+    padding: 25px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+}
+
+.question-card p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+.answer-buttons button {
+    margin: 0 10px;
+    padding: 12px 25px;
+    font-size: 1.1em;
+}
+
+#result-area {
+    margin-top: 30px;
+}
+
+#result-title {
+    color: #dc3545;
+    font-size: 2em;
+    margin-bottom: 15px;
+}
+
+#result-text {
+    font-size: 1.1em;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+#yes-count-text {
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+#retry-btn {
+    background-color: #28a745;
+}
+
+#retry-btn:hover {
+    background-color: #1e7e34;
+}
+
+/* 診断結果のレベル別スタイル */
+.result-low #result-title {
+    color: #28a745; /* 緑 */
+}
+
+.result-medium #result-title {
+    color: #ffc107; /* 黄 */
+}
+
+.result-high #result-title {
+    color: #fd7e14; /* オレンジ */
+}
+
+.result-danger {
+    background-color: #dc3545; /* 赤系の背景 */
+    color: white;
+    border: 2px solid #b21f2d;
+}
+
+.result-danger #result-title {
+    color: white;
+    text-shadow: 1px 1px 2px black;
+}
+
+.result-danger #retry-btn {
+    background-color: #f8f9fa;
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.result-danger #retry-btn:hover {
+    background-color: #e2e6ea;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+        margin: 10px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    #intro p {
+        font-size: 1em;
+    }
+
+    button {
+        padding: 12px 24px;
+        font-size: 1.1em;
+    }
+
+    .question-card p {
+        font-size: 1.1em;
+    }
+
+    .answer-buttons button {
+        padding: 10px 20px;
+        font-size: 1em;
+        display: block;
+        width: 80%;
+        margin: 10px auto;
+    }
+
+    #result-title {
+        font-size: 1.8em;
+    }
+
+    #result-text {
+        font-size: 1em;
+    }
+}
