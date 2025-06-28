@@ -118,24 +118,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function displayQuestion() {
-        if (currentQuestionIndex < questions.length) {
-            const question = questions[currentQuestionIndex];
-            questionArea.innerHTML = `
-                <div class="question-card">
-                    <p>質問 ${currentQuestionIndex + 1}: ${question}</p>
-                    <div class="answer-buttons">
-                        <button class="answer-btn" data-answer="yes">はい</button>
-                        <button class="answer-btn" data-answer="no">いいえ</button>
-                    </div>
+        const question = questions[currentQuestionIndex];
+        questionArea.innerHTML = `
+            <div class="question-card">
+                <p>質問 ${currentQuestionIndex + 1}: ${question}</p>
+                <div class="answer-buttons">
+                    <button class="answer-btn" data-answer="yes">はい</button>
+                    <button class="answer-btn" data-answer="no">いいえ</button>
                 </div>
-            `;
+            </div>
+        `;
 
-            document.querySelectorAll('.answer-btn').forEach(button => {
-                button.addEventListener('click', handleAnswer);
-            });
-        } else {
-            showResult();
-        }
+        document.querySelectorAll('.answer-btn').forEach(button => {
+            button.addEventListener('click', handleAnswer);
+        });
     }
 
     function handleAnswer(event) {
@@ -143,7 +139,12 @@ document.addEventListener('DOMContentLoaded', () => {
             yesCount++;
         }
         currentQuestionIndex++;
-        displayQuestion();
+
+        if (currentQuestionIndex < questions.length) {
+            displayQuestion();
+        } else {
+            showResult();
+        }
     }
 
     function showResult() {
