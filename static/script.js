@@ -1,15 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // DOM Elements
     const startBtn = document.getElementById('start-btn');
     const retryBtn = document.getElementById('retry-btn');
     const introArea = document.getElementById('intro');
     const questionArea = document.getElementById('question-area');
     const resultArea = document.getElementById('result-area');
 
+    // State
     let questions = [];
     let currentQuestionIndex = 0;
     let yesCount = 0;
 
-    // ---ここから追加---
+    // Data
     const allQuestions = [
         // 真面目な質問
         "休憩時間を取らずに作業を続けてしまうことがよくありますか？",
@@ -86,7 +88,9 @@ document.addEventListener('DOMContentLoaded', () => {
         "寝る前に羊を数える代わりに、未解決のバグを数えてしまう"
     ];
 
-    // Fisher-Yates shuffle algorithm
+    // --- Functions ---
+
+    // Utility to shuffle an array
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -94,29 +98,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         return array;
     }
-    // ---ここまで追加---
 
-    startBtn.addEventListener('click', startChecker);
-    retryBtn.addEventListener('click', () => {
-        introArea.classList.remove('hidden');
-        resultArea.classList.add('hidden');
-        questionArea.innerHTML = ''; // 質問をクリア
-    });
-
-    function startChecker() {
+    // Controls which main view is visible
+    function showView(viewName) { // 'intro', 'question', 'result'
         introArea.classList.add('hidden');
-        questionArea.classList.remove('hidden');
+        questionArea.classList.add('hidden');
         resultArea.classList.add('hidden');
-        currentQuestionIndex = 0;
-        yesCount = 0;
 
-        // ---ここから修正---
-        // サーバーに問い合わせる代わりに、JS内で質問をシャッフルして10個選ぶ
-        questions = shuffle([...allQuestions]).slice(0, 10);
-        displayQuestion();
-        // ---ここまで修正---
+        if (viewName === 'intro') {
+            introArea.classList.remove('hidden');
+        } else if (viewName === 'question') {
+            questionArea.classList.remove('hidden');
+        } else if (viewName === 'result') {
+            resultArea.classList.remove('hidden');
+        }
     }
 
+    // Starts the checker
+    function startChecker() {
+        currentQuestionIndex = 0;
+        yesCount = 0;
+        questions = shuffle([...allQuestions]).slice(0, 10);
+        displayQuestion();
+        showView('question');
+    }
+
+    // Displays the current question
     function displayQuestion() {
         const question = questions[currentQuestionIndex];
         questionArea.innerHTML = `
@@ -128,12 +135,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
         `;
-
+        // Add new event listeners after updating innerHTML
         document.querySelectorAll('.answer-btn').forEach(button => {
             button.addEventListener('click', handleAnswer);
         });
     }
 
+    // Handles the user's answer
     function handleAnswer(event) {
         if (event.target.dataset.answer === 'yes') {
             yesCount++;
@@ -147,12 +155,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Calculates and displays the final result
     function showResult() {
-        questionArea.classList.add('hidden');
-        resultArea.classList.remove('hidden');
-
-        // ---ここから修正---
-        // サーバーに問い合わせる代わりに、JS内で結果を判定する
         let result_title, result_text, result_level;
 
         if (yesCount <= 2) {
@@ -167,21 +171,36 @@ document.addEventListener('DOMContentLoaded', () => {
             result_title = "セルフブラック度: 高";
             result_text = "かなり自分を追い込んでいませんか？心身の疲れが溜まっている可能性があります。「何もしない時間」を意識して作り、自分を労ってあげましょう。一人で抱え込まず、周りに相談することも考えてみてください。";
             result_level = "high";
-        } else {
+        } else { // 9 or 10
             result_title = "セルフブラック度: 危険信号！";
             result_text = "あなたは無意識のうちに自分を極限まで追い込んでいる可能性があります。バーンアウト（燃え尽き症候群）の危険も。今すぐ休息が必要です。専門家や信頼できる人に相談し、働き方や考え方を見直すことを強くお勧めします。";
             result_level = "danger";
         }
 
+        // Populate result elements
         document.getElementById('result-title').textContent = result_title;
         document.getElementById('result-text').textContent = result_text;
         document.getElementById('yes-count-text').textContent = `「はい」の数: ${yesCount} / 10`;
 
-        const resultArea = document.getElementById('result-area');
+        // Apply result styling
         resultArea.classList.remove('result-low', 'result-medium', 'result-high', 'result-danger');
         if (result_level) {
             resultArea.classList.add(`result-${result_level}`);
         }
-        // ---ここまで修正---
+
+        showView('result');
     }
+
+    // Resets the checker to the initial state
+    function resetChecker() {
+        questionArea.innerHTML = '';
+        showView('intro');
+    }
+
+    // --- Event Listeners ---
+    startBtn.addEventListener('click', startChecker);
+    retryBtn.addEventListener('click', resetChecker);
+
+    // --- Initial State ---
+    showView('intro');
 });
